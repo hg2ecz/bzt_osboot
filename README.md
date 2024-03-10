@@ -54,6 +54,7 @@ typedef struct {
 } almost_efi_system_table_but_not_quite_t;
 ```
 A program belépési pontja egy mutatót kap paraméterül erre a struktúrára, pontosan úgy, mint UEFI-nél.
+EDIT: mivel sokan sírtatok, ezért módosítás: az összes paraméternél kiírtam, hogy const, ha ez nem lett volna egyértelmű, és ezeknél a függvényeknél, és szigorúan csakis ezeknél az interfész által biztosított függvényeknél használható Rust alatt az unsafe. VAGY Az interfészt egyáltalán **nem kötelező** használni, le is implementálhatjátok ezt a négy függvényt Rust-ban, ekkor azonban nem lesz külsős függvényhívás, így ilyenkor tilos az unsafe.
 
 Továbbá, hogy még a hardverprogramozási készségek se számítsanak, és tényleg csak a nyelveket mérjük össze, a betöltő megteszi azt a szívességet is, hogy előre felprogramozza a megszakításvezérlőt valamint a PIT-et másodpercenkénti 100 IRQ megszakításra, azonban nem kezd megszakításokat generálni, míg az enable_interrupts() függvényt meg nem hívjátok.
 Hasonlóan az iretq() hívás gondoskodik a megszakításvezérlőben az IRQ nyugtázásáról is, így azzal sem kell törődnötök. A load_idt() híváshoz segítségként, 32 kivételfajta van és 16 IRQ, a kódszelektor a 32-es, a megszakításkapu attribútuma meg a 0x8E.
