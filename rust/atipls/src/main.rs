@@ -92,7 +92,10 @@ unsafe extern "C" fn main(interface: &'static BootLoaderInterface) -> ! {
 
 unsafe extern "C" fn pit_interrupt_handler() {
     APPLICATION.pit_tick();
-    (INTERFACE.unwrap().iretq)(-16);
+
+    if let Some(interface) = INTERFACE {
+        (interface.iretq)(-16);
+    }
 }
 
 #[panic_handler]
