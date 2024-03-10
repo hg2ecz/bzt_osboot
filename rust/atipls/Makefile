@@ -1,6 +1,6 @@
 all: program.elf
 
-program-elf:
+program.elf:
 	cargo +nightly build --release
 
 clean:
