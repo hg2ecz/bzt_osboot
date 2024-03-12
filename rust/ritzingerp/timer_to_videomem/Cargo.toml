@@ -1,0 +1,16 @@
+[package]
+name = "timer_to_videomem"
+version = "0.1.0"
+edition = "2021"
+autoexamples = false
+autotests = false
+autobenches = false
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+x86 = "0.52.0"
+
+[profile.release]
+panic = "abort"
+strip = true

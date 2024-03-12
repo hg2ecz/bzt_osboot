@@ -1,0 +1,7 @@
+[build]
+target = "x86_64-unknown-none"
+rustflags = [
+    "-C", "relocation-model=dynamic-no-pic",
+    "-C", "link-args=-no-pie",
+    "-C", "link-arg=-Tlinker.ld",
+]
