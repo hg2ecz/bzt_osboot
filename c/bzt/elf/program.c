@@ -30,13 +30,7 @@ void isr_handler(void)
         }
     }
     /* visszatérés a kivételkezelőből */
-#ifndef PE
     INTERFACE->iretq(0);
-#else
-    /* Clang bug: hiába van megadva a kapcsoló, hogy ne, mégis helyet csinál a veremben az MS ABI regisztereknek, ha a formátum PE.
-     * Clang ELF-nél és gcc-vel nincs gond, ott minden úgy működik, ahogy kell */
-    INTERFACE->iretq(32);
-#endif
 }
 
 /* belépési pont */
