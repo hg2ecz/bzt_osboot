@@ -1,0 +1,18 @@
+{
+	"llvm-target":   "x86_64-elf",
+	"cpu":           "x86-64",
+	"goos":          "linux",
+	"goarch":        "amd64",
+	"libc":          "",
+	"linker":        "ld.lld",
+	"rtlib":         "compiler-rt",
+  "gc":            "conservative",
+  "scheduler":     "tasks",
+	"default-stack-size": 65536,
+	"ldflags": [
+		"-s",
+		"-static",
+		"-nostdlib"
+	],
+	"linkerscript": "link.ld"
+}
