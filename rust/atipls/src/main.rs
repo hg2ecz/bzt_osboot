@@ -1,4 +1,3 @@
-#![feature(abi_x86_interrupt)]
 #![no_std]
 #![no_main]
 
@@ -25,7 +24,7 @@ struct InterruptEntry {
 }
 
 impl InterruptEntry {
-    const fn new(offset: u64, selector: u16, attributes: u8) -> InterruptEntry {
+    const fn new(offset: usize, selector: u16, attributes: u8) -> InterruptEntry {
         InterruptEntry {
             offset_low: offset as u16,
             selector,
@@ -57,7 +56,7 @@ impl Application {
         for i in 0..4usize {
             let digit = (number / 10usize.pow(3 - i as u32)) % 10;
             unsafe {
-                vga.add(i * 2).write(digit as u8 + 48);
+                vga.add(i * 2).write(digit as u8 + b'0');
             }
         }
     }
@@ -73,32 +72,34 @@ impl Application {
 }
 
 static mut INTERFACE: Option<&'static BootLoaderInterface> = None;
-static mut IDT: [InterruptEntry; 48] = [InterruptEntry::new(0, 0, 0); 48];
 static mut APPLICATION: Application = Application::new();
 
-
 #[no_mangle]
-unsafe extern "C" fn main(interface: &'static BootLoaderInterface) -> ! {
-    INTERFACE = Some(interface);
+extern "C" fn main(interface: &'static BootLoaderInterface) -> ! {
+    unsafe {
+        INTERFACE = Some(interface);
+        APPLICATION.write_number(0);
+    }
+    let mut idt = [InterruptEntry::new(0, 0, 0); 48];
+    idt[32] = InterruptEntry::new(pit_interrupt_handler as usize, 32, 0x8E);
 
-    APPLICATION.write_number(0);
-    IDT[32] = InterruptEntry::new(pit_interrupt_handler as u64, 32, 0x8E);
-
-    (interface.load_idt)(addr_of_mut!(IDT) as usize, 48 * size_of::<InterruptEntry>() as u16);
+    #[rustfmt::skip]
+    (interface.load_idt)(addr_of_mut!(idt) as usize, 48 * size_of::<InterruptEntry>() as u16);
     (interface.enable_interrupts)();
-
+    #[allow(clippy::empty_loop)]
     loop {}
 }
 
-unsafe extern "C" fn pit_interrupt_handler() {
-    APPLICATION.pit_tick();
+extern "C" fn pit_interrupt_handler() {
+    unsafe { APPLICATION.pit_tick() };
 
-    if let Some(interface) = INTERFACE {
+    if let Some(interface) = unsafe { INTERFACE } {
         (interface.iretq)(-16);
     }
 }
 
 #[panic_handler]
 fn panic(__info: &PanicInfo) -> ! {
+    #[allow(clippy::empty_loop)]
     loop {}
 }
