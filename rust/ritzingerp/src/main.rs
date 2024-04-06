@@ -34,7 +34,9 @@ fn update_display(counter: u32) {
         let mut seconds: u32 = counter / 100;
         for i in (0..4).rev() {
             let digit: u8 = (seconds % 10) as u8 + b'0';
-            unsafe { write_volatile(VIDEO_BUFFER.add(i * 2), digit) };
+            unsafe {
+                write_volatile(VIDEO_BUFFER.add(2 * i), digit);
+            }
             seconds /= 10;
         }
     }

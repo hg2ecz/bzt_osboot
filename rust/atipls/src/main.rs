@@ -38,8 +38,8 @@ impl InterruptEntry {
 }
 
 struct Application {
-    timer: usize,
-    counter: usize,
+    timer: u32,
+    counter: u32,
 }
 
 impl Application {
@@ -50,13 +50,13 @@ impl Application {
         }
     }
 
-    fn write_number(&self, number: usize) {
+    fn write_number(&self, number: u32) {
         let vga = 0xb8000 as *mut u8;
 
-        for i in 0..4usize {
-            let digit = (number / 10usize.pow(3 - i as u32)) % 10;
+        for i in 0..4 {
+            let digit = ((number / 10_u32.pow(3 - i as u32)) % 10) as u8 + b'0';
             unsafe {
-                vga.add(i * 2).write(digit as u8 + b'0');
+                vga.add(2 * i).write(digit);
             }
         }
     }

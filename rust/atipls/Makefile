@@ -16,7 +16,7 @@ preinst:
 	    curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh -s - -y; \
 	fi
 	@IS_BARE=$$(rustup target list | grep installed | grep x86_64-unknown-none); \
-	if [ -z "$$IS_BARE)" ]; then \
+	if [ -z "$$IS_BARE" ]; then \
 	    $(RUST_BIN)/rustup target add x86_64-unknown-none; \
 	fi
 
