@@ -1,0 +1,4 @@
+module efistuff {
+    header "defs.h"
+}
+

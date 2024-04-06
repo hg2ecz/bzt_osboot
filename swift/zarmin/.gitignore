@@ -1,0 +1,6 @@
+*.elf
+!program.elf
+*.bin
+*.o
+*.img
+run.sh
