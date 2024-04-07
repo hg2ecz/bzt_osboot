@@ -55,9 +55,7 @@ impl Application {
 
         for i in 0..4 {
             let digit = ((number / 10_u32.pow(3 - i as u32)) % 10) as u8 + b'0';
-            unsafe {
-                vga.add(2 * i).write(digit);
-            }
+            unsafe { vga.add(2 * i).write(digit) };
         }
     }
 
