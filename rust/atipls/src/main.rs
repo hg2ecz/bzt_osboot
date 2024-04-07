@@ -98,6 +98,5 @@ extern "C" fn pit_interrupt_handler() {
 
 #[panic_handler]
 fn panic(__info: &PanicInfo) -> ! {
-    #[allow(clippy::empty_loop)]
     loop {}
 }
